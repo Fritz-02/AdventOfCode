@@ -17,7 +17,18 @@ config.read(find_config())
 session = config.get("Cookies", "session")
 
 
-def get_input(year: int, day: int):
+def get_input(
+    year: int = None,
+    day: int = None,
+    *,
+    filename: str = None,
+    split_lines: bool = False,
+) -> str:
+    if filename:
+        parts = filename.split("\\")
+        year = parts[-2]
+        day = parts[-1].split(".")[0][3:]
+
     request = urllib.request.Request(
         f"https://adventofcode.com/{year}/day/{day}/input",
         headers={"Cookie": f"session={session}"},
@@ -25,4 +36,4 @@ def get_input(year: int, day: int):
 
     with urllib.request.urlopen(request) as resp:
         content = resp.read().decode("utf-8").strip()
-    return content
+    return content.split("\n") if split_lines else content
