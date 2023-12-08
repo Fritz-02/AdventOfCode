@@ -23,6 +23,7 @@ def get_input(
     *,
     filename: str = None,
     split_lines: bool = False,
+    strip: bool = True,
 ) -> str:
     if filename:
         parts = filename.split("\\")
@@ -35,5 +36,7 @@ def get_input(
     )
 
     with urllib.request.urlopen(request) as resp:
-        content = resp.read().decode("utf-8").strip()
+        content = resp.read().decode("utf-8")
+    if strip:
+        content = content.strip()
     return content.split("\n") if split_lines else content
